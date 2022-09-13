@@ -1,5 +1,5 @@
 use smithay::{
-    delegate_xdg_shell,
+    delegate_xdg_shell, delegate_xdg_decoration,
     desktop::{Kind, Space, Window, WindowSurfaceType},
     input::{
         pointer::{Focus, GrabStartData as PointerGrabStartData},
@@ -16,11 +16,13 @@ use smithay::{
     wayland::{
         compositor::with_states,
         shell::xdg::{
-            PopupSurface, PositionerState, ToplevelSurface, XdgShellHandler, XdgShellState,
+            PopupSurface, PositionerState, ToplevelSurface, XdgShellHandler, XdgShellState, decoration::XdgDecorationHandler,
             XdgToplevelSurfaceData,
         },
     },
 };
+
+use smithay::reexports::wayland_protocols::xdg::decoration::zv1::server::zxdg_toplevel_decoration_v1::Mode;
 
 use crate::{
     grabs::{MoveSurfaceGrab, ResizeSurfaceGrab},
@@ -110,8 +112,22 @@ impl XdgShellHandler for Corrosion {
     }
 }
 
+impl XdgDecorationHandler for Corrosion {
+    fn new_decoration(&mut self, toplevel: ToplevelSurface) {
+        toplevel.with_pending_state(|state| {
+            // Advertise server side decoration
+            state.decoration_mode = Some(Mode::ServerSide);
+        });
+        toplevel.send_configure();
+    }
+    fn request_mode(&mut self, toplevel: ToplevelSurface, mode: Mode) { /* ... */ }
+    fn unset_mode(&mut self, toplevel: ToplevelSurface) { /* ... */ }
+}
+
 // Xdg Shell
 delegate_xdg_shell!(Corrosion);
+// Xdg Decoration
+delegate_xdg_decoration!(Corrosion);
 
 fn check_grab(
     seat: &Seat<Corrosion>,

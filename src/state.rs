@@ -15,7 +15,7 @@ use smithay::{
     utils::{Logical, Point},
     wayland::{
         compositor::CompositorState, data_device::DataDeviceState, output::OutputManagerState,
-        shell::xdg::XdgShellState, shm::ShmState, socket::ListeningSocketSource,
+        shell::xdg::{XdgShellState, decoration::XdgDecorationState}, shm::ShmState, socket::ListeningSocketSource,
     },
 };
 
@@ -32,6 +32,7 @@ pub struct Corrosion {
     // Smithay State
     pub compositor_state: CompositorState,
     pub xdg_shell_state: XdgShellState,
+    pub xdg_decoration_state: XdgDecorationState,
     pub shm_state: ShmState,
     pub output_manager_state: OutputManagerState,
     pub seat_state: SeatState<Corrosion>,
@@ -48,6 +49,11 @@ impl Corrosion {
 
         let compositor_state = CompositorState::new::<Self, _>(&dh, log.clone());
         let xdg_shell_state = XdgShellState::new::<Self, _>(&dh, log.clone());
+        // Create a decoration state
+        let xdg_decoration_state = XdgDecorationState::new::<Corrosion, _>(
+            &display.handle(),
+            None,
+        );
         let shm_state = ShmState::new::<Self, _>(&dh, vec![], log.clone());
         let output_manager_state = OutputManagerState::new_with_xdg_output::<Self>(&dh);
         let mut seat_state = SeatState::new();
@@ -86,6 +92,7 @@ impl Corrosion {
             log,
             compositor_state,
             xdg_shell_state,
+            xdg_decoration_state,
             shm_state,
             output_manager_state,
             seat_state,
