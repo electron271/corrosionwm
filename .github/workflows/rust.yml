@@ -20,7 +20,7 @@ jobs:
       run: |
         sudo apt update
         sudo apt upgrade -y
-        sudo apt install libwayland-dev
+        sudo apt install libwayland-dev libxkbcommon-dev
     - name: Build
       run: cargo build --verbose
     - name: Run tests

@@ -120,8 +120,8 @@ impl XdgDecorationHandler for Corrosion {
         });
         toplevel.send_configure();
     }
-    fn request_mode(&mut self, toplevel: ToplevelSurface, mode: Mode) { /* ... */ }
-    fn unset_mode(&mut self, toplevel: ToplevelSurface) { /* ... */ }
+    fn request_mode(&mut self, _toplevel: ToplevelSurface, _mode: Mode) { /* ... */ }
+    fn unset_mode(&mut self, _toplevel: ToplevelSurface) { /* ... */ }
 }
 
 // Xdg Shell
