@@ -56,7 +56,7 @@ impl Corrosion {
         );
         let shm_state = ShmState::new::<Self, _>(&dh, vec![], log.clone());
         let output_manager_state = OutputManagerState::new_with_xdg_output::<Self>(&dh);
-        let mut seat_state = SeatState::new();
+        let mut seat_state = SeatState::<Corrosion>::new();
         let data_device_state = DataDeviceState::new::<Self, _>(&dh, log.clone());
 
         // A seat is a group of keyboards, pointer and touch devices.
@@ -65,7 +65,7 @@ impl Corrosion {
 
         // Notify clients that we have a keyboard, for the sake of the example we assume that keyboard is always present.
         // You may want to track keyboard hot-plug in real compositor.
-        seat.add_keyboard(Default::default(), 200, 200).unwrap();
+        seat.add_keyboard(Default::default(), 1000, 500).unwrap();
 
         // Notify clients that we have a pointer (mouse)
         // Here we assume that there is always pointer plugged in
