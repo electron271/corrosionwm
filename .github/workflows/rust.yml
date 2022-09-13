@@ -31,5 +31,10 @@ jobs:
     
     steps:
     - uses: actions/checkout@v3
+    - name: Install Dependencies
+      run: |
+        sudo apt update
+        sudo apt upgrade -y
+        sudo apt install libwayland-dev libxkbcommon-dev
     - name: Run linter
       run: cargo clippy --verbose
