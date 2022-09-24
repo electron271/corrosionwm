@@ -62,7 +62,7 @@ jobs:
           override: true
           components: rustfmt, clippy
     - name: Install deps
-      run: sudo apt install wayland-client
+      run: sudo apt install libwayland-client
     - name: Build
       run: cargo build --verbose
     - name: Test
